@@ -6,12 +6,20 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+// Middleware - explicit CORS for browser clients
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
+app.use(express.json());
+
 
 // IMPORTANT: answer preflight requests for *all* routes
 app.options("*", cors());

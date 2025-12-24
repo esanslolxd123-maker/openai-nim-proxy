@@ -11,14 +11,12 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
 });
 
 app.use(express.json());
+
 
 
 // IMPORTANT: answer preflight requests for *all* routes
@@ -76,7 +74,7 @@ app.get('/v1/models', (req, res) => {
 // Chat completions endpoint (main proxy)
 app.post('/v1/chat/completions', async (req, res) => {
   try {
-    const { model, messages, temperature, max_tokens, stream } = req.body;
+    const { model, messages } = req.body;  // Coerce types safely (some clients send strings) const temperatureRaw = req.body.temperature; const maxTokensRaw  = req.body.max_tokens; const streamRaw     = req.body.stream;  const temperature = Number.isFinite(+temperatureRaw) ? +temperatureRaw : 0.6; const max_tokens  = Number.isFinite(+maxTokensRaw) ? parseInt(maxTokensRaw, 10) : 9024;  // Only literal true enables streaming (prevents "false" -> true) const stream = streamRaw === true || streamRaw === "true";
     
     // Smart model selection with fallback
     let nimModel = MODEL_MAPPING[model];
@@ -112,10 +110,12 @@ app.post('/v1/chat/completions', async (req, res) => {
     const nimRequest = {
       model: nimModel,
       messages: messages,
-      temperature: temperature || 0.6,
-      max_tokens: max_tokens || 9024,
+
+      temperature: temperature,
+      max_tokens: max_tokens,
+
       extra_body: ENABLE_THINKING_MODE ? { chat_template_kwargs: { thinking: true } } : undefined,
-      stream: stream || false
+      stream: stream
     };
     
     // Make request to NVIDIA NIM API

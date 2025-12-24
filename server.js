@@ -230,17 +230,25 @@ app.post('/v1/chat/completions', async (req, res) => {
       res.json(openaiResponse);
     }
     
-  } catch (error) {
-    console.error('Proxy error:', error.message);
-    
-    res.status(error.response?.status || 500).json({
-      error: {
-        message: error.message || 'Internal server error',
-        type: 'invalid_request_error',
-        code: error.response?.status || 500
-      }
-    });
+} catch (error) {
+  console.error('Proxy error:', error.message);
+
+  if (error.response) {
+    console.error('Upstream status:', error.response.status);
+    console.error('Upstream data:', JSON.stringify(error.response.data).slice(0, 2000));
+  } else {
+    console.error('No upstream response (network/DNS/timeout)');
   }
+
+  res.status(error.response?.status || 500).json({
+    error: {
+      message: error.message || 'Internal server error',
+      type: 'invalid_request_error',
+      code: error.response?.status || 500
+    }
+  });
+}
+
 });
 
 // Catch-all for unsupported endpoints

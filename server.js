@@ -15,15 +15,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
+app.use(express.json({ type: ["application/json", "application/*+json"] }));
 
 
 
 // IMPORTANT: answer preflight requests for *all* routes
 app.options("*", cors());
-
-app.use(express.json());
-
 
 // NVIDIA NIM API configuration
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
@@ -74,7 +71,41 @@ app.get('/v1/models', (req, res) => {
 // Chat completions endpoint (main proxy)
 app.post('/v1/chat/completions', async (req, res) => {
   try {
-    const { model, messages } = req.body;  // Coerce types safely (some clients send strings) const temperatureRaw = req.body.temperature; const maxTokensRaw  = req.body.max_tokens; const streamRaw     = req.body.stream;  const temperature = Number.isFinite(+temperatureRaw) ? +temperatureRaw : 0.6; const max_tokens  = Number.isFinite(+maxTokensRaw) ? parseInt(maxTokensRaw, 10) : 9024;  // Only literal true enables streaming (prevents "false" -> true) const stream = streamRaw === true || streamRaw === "true";
+    // Parse and validate incoming request
+    const body = req.body || {};
+    const model = body.model;
+    const messages = body.messages;
+
+    if (!model || typeof model !== "string") {
+      return res.status(400).json({
+        error: {
+          message: "Missing or invalid 'model' in request body",
+          type: "invalid_request_error",
+          code: 400
+        }
+      });
+    }
+
+    if (!Array.isArray(messages)) {
+      return res.status(400).json({
+        error: {
+          message: "Missing or invalid 'messages' array in request body",
+          type: "invalid_request_error",
+          code: 400
+        }
+      });
+    }
+
+    // Coerce types safely (clients sometimes send strings)
+    const temperatureRaw = body.temperature;
+    const maxTokensRaw = body.max_tokens;
+    const streamRaw = body.stream;
+
+    const temperature = Number.isFinite(+temperatureRaw) ? +temperatureRaw : 0.6;
+    const max_tokens = Number.isFinite(+maxTokensRaw) ? parseInt(maxTokensRaw, 10) : 9024;
+
+    // Only literal true enables streaming (prevents "false" string turning it on)
+    const stream = streamRaw === true || streamRaw === "true";
     
     // Smart model selection with fallback
     let nimModel = MODEL_MAPPING[model];

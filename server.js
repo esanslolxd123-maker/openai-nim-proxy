@@ -26,6 +26,11 @@ app.use(express.json({ type: ["application/json", "application/*+json"] }));
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
 
+if (!NIM_API_KEY) {
+  console.error("NIM_API_KEY is missing. Set it in Render environment variables.");
+}
+
+
 // 🔥 REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
 const SHOW_REASONING = false; // Set to true to show reasoning with <think> tags
 

@@ -20,7 +20,7 @@ app.use(express.json({ type: ["application/json", "application/*+json"] }));
 
 
 // IMPORTANT: answer preflight requests for *all* routes
-app.options("*", cors());
+
 
 // NVIDIA NIM API configuration
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';

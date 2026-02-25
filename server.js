@@ -23,7 +23,10 @@ app.use((req, res, next) => {
 
 app.use(express.json({ type: ["application/json", "application/*+json"] }));
 
-
+app.use(express.json({ 
+  limit: "50mb",
+  type: ["application/json", "application/*+json"]
+}));
 
 // IMPORTANT: answer preflight requests for *all* routes
 
@@ -31,6 +34,16 @@ app.use(express.json({ type: ["application/json", "application/*+json"] }));
 // NVIDIA NIM API configuration
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
+
+const response = await axios.post(`${NIM_API_BASE}/chat/completions`, nimRequest, {
+  headers: {
+    'Authorization': `Bearer ${NIM_API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  responseType: stream ? 'stream' : 'json',
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
+});
 
 if (!NIM_API_KEY) {
   console.error("NIM_API_KEY is missing. Set it in Render environment variables.");

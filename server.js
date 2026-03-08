@@ -37,6 +37,9 @@ const MODEL_MAPPING = {
   "claude-3-opus": "openai/gpt-oss-120b",
   "claude-3-sonnet": "openai/gpt-oss-20b",
   "gemini-pro": "qwen/qwen3-next-80b-a3b-thinking",
+  "rp-king":  "moonshotai/kimi-k2-instruct-0905",   // best memory + strong reasoning when it’s behaving
+  "rp-brain": "meta/llama-3.1-405b-instruct",       // strong reasoning, usually available
+  "rp-prose": "deepseek-ai/deepseek-v3.1",          // best “writer vibe” option
 };
 
 // ===== Middleware =====

@@ -39,7 +39,7 @@ const MODEL_MAPPING = {
   "gemini-pro": "qwen/qwen3-next-80b-a3b-thinking",
   "rp-king":  "moonshotai/kimi-k2-instruct-0905",   // best memory + strong reasoning when it’s behaving
   "rp-brain": "meta/llama-3.1-405b-instruct",       // strong reasoning, usually available
-  "rp-prose": "deepseek-ai/deepseek-v3.1",          // best “writer vibe” option
+  "rp-prose": "deepseek-ai/deepseek-v3.2",          // best “writer vibe” option
 };
 
 // ===== Middleware =====

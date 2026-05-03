@@ -43,6 +43,11 @@ const MODEL_MAPPING = {
   "rp-prose": "deepseek-ai/deepseek-v3.2",                    // your best current writer option
   "rp-nemotron": "nvidia/nemotron-3-super-120b-a12b",         // newer NVIDIA conversational model
   "rp-kimi-think": "moonshotai/kimi-k2-thinking",             // newer Kimi-family reasoning variant
+    // new DeepSeek V4 aliases
+  "rp-v4": "deepseek-ai/deepseek-v4-pro",
+  "rp-v4-pro": "deepseek-ai/deepseek-v4-pro",
+  "rp-v4-flash": "deepseek-ai/deepseek-v4-flash"
+};
 };
 
 // ===== Middleware =====

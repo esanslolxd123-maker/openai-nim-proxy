@@ -30,6 +30,20 @@ const AXIOS_TIMEOUT_MS = Number(process.env.AXIOS_TIMEOUT_MS || 600000); // 10 m
 
 // Model mapping: "OpenAI-ish name" -> "NIM model id"
 const MODEL_MAPPING = {
+
+  "rp-kimi26": "moonshotai/kimi-k2.6",
+  "rp-glm51": "z-ai/glm5.1",
+  "rp-mistral35": "mistralai/mistral-medium-3-5-128b",
+  "rp-minimax27": "minimaxai/minimax-m2.7",
+  "rp-nemotron3": "nvidia/nemotron-3-super-120b-a12b",
+
+  // Bonus extra candidates
+  "rp-mistral-small4": "mistralai/mistral-small-4-119b-2603",
+  "rp-qwen35": "qwen/qwen3.5-397b-a17b",
+  "rp-step35": "stepfun-ai/step-3-5-flash",
+  "rp-nemotron49": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+  "rp-minimax25": "minimaxai/minimax-m2.5"
+    
   "gpt-3.5-turbo": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
   "gpt-4": "qwen/qwen3-coder-480b-a35b-instruct",
   "gpt-4-turbo": "moonshotai/kimi-k2-instruct-0905",
